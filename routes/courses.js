@@ -11,4 +11,20 @@ router.get('/', async (req, res) => {
     });
 });
 
+router.get('/:id/edit', async (req, res) => {
+    if (!req.query.allow) {
+        res.redirect('/');
+        return;
+    }
+})
+
+router.get('/:id', async (req, res) => {
+    const course = await Course.getById(req.params.id)
+    res.render('course', {
+        layout: 'empty',
+        title: `Курс ${course.title}`,
+        course
+    });
+})
+
 module.exports = router;
