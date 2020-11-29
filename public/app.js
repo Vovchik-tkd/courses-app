@@ -28,8 +28,12 @@ if ($card) {
     $card.addEventListener('click', (e) => {
         if (e.target.classList.contains('js-remove')) {
             const id = e.target.dataset.id;
+            const csrf = e.target.dataset.csrf;
             fetch(`/card/remove/${id}`, {
                 method: 'DELETE',
+                headers: {
+                    'X-XSRF-TOKEN': csrf
+                }
             }).then(res => res.json())
             .then(card => {
                 if (card.courses.length) {
@@ -39,7 +43,7 @@ if ($card) {
                             <td>${c.title}</td>
                             <td>${c.count}</td>
                             <td>
-                                <button class="btn btn-small js-remove" data-id="${c.id}">Удалить</button>
+                                <button class="btn btn-small js-remove" data-id="${c.id}" data-csrf="${c.csrf}">Удалить</button>
                             </td>
                         </tr>
                         `
@@ -53,3 +57,5 @@ if ($card) {
         }
     })
 }
+
+var instance = M.Tabs.init(document.querySelectorAll('.tabs'));
