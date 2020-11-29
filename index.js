@@ -14,10 +14,10 @@ const hbs = exphbs.create({
     extname: 'hbs',
     handlebars: allowInsecurePrototypeAccess(Handlebars)
 });
-const MONGODB_URI = 'mongodb+srv://vovayubko:24j8YjTzcenJLhxv@cluster0.qdsy6.mongodb.net/shop?retryWrites=true&w=majority';
+const keys = require('./keys');
 const store = new MongoStore({
     collection: 'sessions',
-    uri: MONGODB_URI
+    uri: keys.MONGODB_URI
 })
 const varMiddleware = require('./middleware/variables');
 const userMiddleware = require('./middleware/user');
@@ -37,7 +37,7 @@ app.set('views', 'views');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({extended: true }))
 app.use(session({
-    secret: 'some secret value',
+    secret: keys.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     store
@@ -57,7 +57,7 @@ app.use('/auth', authRoutes);
 async function start() {
     try {
         
-        await mongoose.connect(MONGODB_URI, {
+        await mongoose.connect(keys.MONGODB_URI, {
             useNewUrlParser: true,
             useFindAndModify: false,
             useUnifiedTopology: true
